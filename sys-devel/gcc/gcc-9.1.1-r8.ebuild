@@ -58,9 +58,9 @@ fi
 GCC_SVN_PATCH="${GCC_SVN_REV:+${GCC_SVN_PATCH_PATH}/gcc-${GCC_ARCHIVE_VER}-to-svn-${GCC_SVN_REV}.patch}"
 
 # Gentoo patcheset
-GENTOO_PATCHES_VER="0.0"
+GENTOO_PATCHES_VER="1.0"
 GENTOO_GCC_PATCHES_VER="${GCC_ARCHIVE_VER}"
-#GENTOO_GCC_PATCHES_VER="6.4.0"
+#GENTOO_GCC_PATCHES_VER="9.1.0"
 GENTOO_PATCHES_DIR="${FILESDIR}/gentoo-patches/gcc-${GENTOO_GCC_PATCHES_VER}-patches-${GENTOO_PATCHES_VER}"
 GENTOO_PATCHES=(
 	#01_all_default-fortify-source.patch
@@ -78,16 +78,16 @@ GENTOO_PATCHES=(
 	13_all_sh-drop-sysroot-suffix.patch
 	14_all_ia64-TEXTREL.patch
 	15_all_disable-systemtap-switch.patch
-
-	17_all_m68k-textrel-on-libgcc.patch
-	18_all_respect-build-cxxflags.patch
-	19_all_libgfortran-Werror.patch
-	20_all_libgomp-Werror.patch
-	21_all_libitm-Werror.patch
-	22_all_libatomic-Werror.patch
-	23_all_libbacktrace-Werror.patch
-	24_all_libsanitizer-Werror.patch
-	25_all_libstdcxx-no-vtv.patch
+	16_all_m68k-textrel-on-libgcc.patch
+	17_all_respect-build-cxxflags.patch
+	18_all_libgfortran-Werror.patch
+	19_all_libgomp-Werror.patch
+	20_all_libitm-Werror.patch
+	21_all_libatomic-Werror.patch
+	22_all_libbacktrace-Werror.patch
+	23_all_libsanitizer-Werror.patch
+	24_all_libstdcxx-no-vtv.patch
+	25_all_ia64-bootstrap.patch
 )
 
 # Math libraries:
@@ -114,10 +114,10 @@ GNAT64="gnat-gpl-2017-x86_64-linux-bin.tar.gz"
 SRC_URI="$SRC_URI ada? ( amd64? ( mirror://funtoo/gcc/${GNAT64} ) x86? ( mirror://funtoo/gcc/${GNAT32} ) )"
 
 # D support
-DLANG_REPO_URI="https://github.com/D-Programming-GDC/GDC.git"
-DLANG_BRANCH="gdc-${GCC_MAJOR}-stable"
-DLANG_COMMIT_DATE="2018-08-26"
-DLANG_CHECKOUT_DIR="${WORKDIR}/gdc"
+#DLANG_REPO_URI="https://github.com/D-Programming-GDC/GDC.git"
+#DLANG_BRANCH="gdc-${GCC_MAJOR}-stable"
+#DLANG_COMMIT_DATE="2018-08-26"
+#DLANG_CHECKOUT_DIR="${WORKDIR}/gdc"
 
 DESCRIPTION="The GNU Compiler Collection"
 
@@ -217,8 +217,8 @@ src_unpack() {
 		fi
 	fi
 
-	# gdc D support
-	if use d ; then
+	# gdc D support -- now included in mainline
+	if false && use d ; then
 		O_EGIT_BRANCH="${EGIT_BRANCH}"
 		O_EGIT_COMMIT="${EGIT_COMMIT}"
 		O_EGIT_COMMIT_DATE="${EGIT_COMMIT_DATE}"
@@ -418,6 +418,8 @@ _gcc_prepare_gnat() {
 }
 
 _gcc_prepare_gdc() {
+	return 0
+	# Now included in mainline, below not needed
 	pushd "${DLANG_CHECKOUT_DIR}" > /dev/null || die "Could not change to GDC directory."
 
 		# Apply patches to the patches to account for gentoo patches modifications to configure changing line numbers
